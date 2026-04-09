@@ -132,7 +132,19 @@
       }
       return true;
     }
+	
+	function ambilAcakK(array, k) {
+	  let salinan = [...array];
 
+	  // Fisher-Yates shuffle (acak array)
+	  for (let i = salinan.length - 1; i > 0; i--) {
+		let j = Math.floor(Math.random() * (i + 1));
+		[salinan[i], salinan[j]] = [salinan[j], salinan[i]];
+	  }
+
+	  // Ambil k elemen pertama
+	  return salinan.slice(0, k);
+	}
     function generateSubset() {
       const input = document.getElementById('inputSet').value;
       const separatorOption = document.querySelector('input[name="separator"]:checked').value;
@@ -198,13 +210,17 @@
           switch (advancedOption) {
             case "given":
               if (randomSubset.length === advancedValue) break;
-              continue;
+			  randomSubset = ambilAcakK(elements, advancedValue);
+			  break;
             case "lessThan":
               if (randomSubset.length < advancedValue) break;
-              continue;
+			  randomSubset = ambilAcakK(elements, advancedValue-1);
+			  randomSubset = randomSubset.filter(() => Math.random() > 0.5);
+              break;
             case "moreThan":
               if (randomSubset.length > advancedValue) break;
-              continue;
+			  randomSubset = ambilAcakK(elements, advancedValue + 1 + Math.floor(Math.random()*(totalElements - advancedValue)));
+              break;
             case "even":
               if (randomSubset.length % 2 === 0) break;
               continue;
